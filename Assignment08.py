@@ -6,9 +6,8 @@
 # RRoot,1.1.2030,Created started script
 # RRoot,1.1.2030,Added pseudo-code to start assignment 8
 # CMuth,12/4/2022,Modified code to complete assignment 8
+# CMuth,12/5/2022,Added error handlers to read_data_from_file, add_data_to_list, and print_current_list_items
 # ------------------------------------------------------------------------ #
-
-from os.path import exists
 
 # Data -------------------------------------------------------------------- #
 strFileName = 'products.txt'
@@ -97,7 +96,7 @@ class FileProcessor:
         :param list_of_products: (list) you want filled with file data:
         :return: (list) of product rows
         """
-        if exists(file_name):
+        try:
             list_of_products.clear()  # clear current data
             file = open(file_name, "r")
             for line in file:
@@ -106,6 +105,10 @@ class FileProcessor:
                 list_of_products.append(product)
             file.close()
             return list_of_products
+        except:
+            print('\n*********************')
+            print('File ' + file_name + ' was not found. No existing data loaded.')
+            print('*********************')
 
     # TODO: Add Code to process data to a file
     @staticmethod
@@ -144,14 +147,18 @@ class DataProcessor:
         :param list_of_products: (list) you want filled with file data:
         :return: (list) of products
         """
+        list_of_products=[]
         try:
-            product = Product(str(product_name).strip(), str(product_price).strip().replace('$',''))
+            name = str(product_name).strip()
+            price = str(product_price).strip().replace('$','')
+            product = Product(name, price)
             list_of_products.append(product)
             bln_changes = True
         except Exception as e:
             print('\n*********************')
-            print('Invalid entry: ' + e)
+            print('Invalid entry: ' + str(e))
             print('*********************')
+            bln_changes = False
         # Pass the updated product list back to the main program
         return list_of_products, bln_changes
 
@@ -201,11 +208,13 @@ class IO:
     # TODO: Add code to show the current data from the file to user
     @staticmethod
     def print_current_list_items(list_of_products):
-        for product in list_of_products:
-            print(product)
-            # name = product.name.ljust(len(product.name)+4)
-            # price = '$' + product.price
-            # print(name + price)
+        try:
+            for product in list_of_products:
+                print(product)
+        except:
+            print('\n*********************')
+            print('No existing data to display.')
+            print('*********************')
 
     # TODO: Add code to get product data from user
     @staticmethod
@@ -215,11 +224,11 @@ class IO:
         :return: (string, string) with task and priority
         """
         # Get new proiduct name from user
-        product = input('What is the product name? ')
+        name = input('What is the product name? ')
         # Get price of new product from user
         price = input('What is the price? ')
         # Pass the user given values back to the main program
-        return product, price
+        return name, price
 
 
 # Presentation (Input/Output)  -------------------------------------------- #
