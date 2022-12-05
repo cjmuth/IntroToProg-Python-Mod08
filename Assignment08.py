@@ -90,11 +90,11 @@ class FileProcessor:
     # TODO: Add Code to process data from a file
     @staticmethod
     def read_data_from_file(file_name, list_of_products):
-        """ Reads data from a file into a list of dictionary rows
+        """ Reads data from a file into a list of objects
 
         :param file_name: (string) with name of file:
         :param list_of_products: (list) you want filled with file data:
-        :return: (list) of product rows
+        :return: (list) of products
         """
         try:
             list_of_products.clear()  # clear current data
@@ -122,7 +122,7 @@ class FileProcessor:
         try:
             # Open the file in write mode
             objFile = open(file_name, 'w')
-            # Loop through dictionaries in table list
+            # Loop through objects in table list
             for product in list_of_products:
                 # Extract values, concatenate as string, write to text file
                 objFile.write(product.product_name + ',' + product.product_price + '\n')
@@ -246,7 +246,7 @@ while True:
     # Get user's menu option choice
     choice_str = IO.input_menu_choice()
     if choice_str.strip() == '1':
-        # Show user current data in the list of product objects21
+        # Show user current data in the list of product objects
         IO.print_current_list_items(lstOfProductObjects)
     elif choice_str.strip() == '2':
         # Let user add data to the list of product objects
