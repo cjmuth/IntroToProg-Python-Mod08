@@ -113,11 +113,11 @@ class FileProcessor:
     # TODO: Add Code to process data to a file
     @staticmethod
     def write_data_to_file(file_name, list_of_products):
-        """ Writes data from a list of dictionary rows to a File
+        """ Writes data from a list of objects to a File
 
         :param file_name: (string) with name of file:
         :param list_of_rows: (list) you want filled with file data:
-        :return: (list) of dictionary rows
+        :return: (list) of products
         """
         try:
             # Open the file in write mode
@@ -140,14 +140,15 @@ class DataProcessor:
 
     @staticmethod
     def add_data_to_list(product_name, product_price, list_of_products):
-        """ Adds data to a list of dictionary rows
+        """ Adds data to a list of objects
 
         :param product_name: (string) with name of a product:
         :param product_price: (string) with price of a product:
         :param list_of_products: (list) you want filled with file data:
         :return: (list) of products
         """
-        list_of_products=[]
+        if not list_of_products:
+            list_of_products = []
         try:
             name = str(product_name).strip()
             price = str(product_price).strip().replace('$','')
