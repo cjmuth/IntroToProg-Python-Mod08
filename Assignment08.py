@@ -12,6 +12,7 @@
 # Data -------------------------------------------------------------------- #
 strFileName = 'products.txt'
 lstOfProductObjects = []
+bln_changes = None
 
 class Product(object):
     """Stores data about a product:
@@ -27,7 +28,6 @@ class Product(object):
     # -- Constructor --
     def __init__(self, name, price):
         self.product_name = name
-        # Remove dollar sign if present
         self.product_price = price
 
     # -- Properties --
@@ -112,29 +112,31 @@ class FileProcessor:
 
     # TODO: Add Code to process data to a file
     @staticmethod
-    def write_data_to_file(file_name, list_of_products):
+    def write_data_to_file(file_name, list_of_products, bln_changes):
         """ Writes data from a list of objects to a File
 
         :param file_name: (string) with name of file:
         :param list_of_rows: (list) you want filled with file data:
         :return: (list) of products
         """
-        try:
-            # Open the file in write mode
-            objFile = open(file_name, 'w')
-            # Loop through objects in table list
-            for product in list_of_products:
-                # Extract values, concatenate as string, write to text file
-                objFile.write(product.product_name + ',' + product.product_price + '\n')
-            # Close text file
-            objFile.close()
-            print('\nData has been saved.')
-            bln_changes = False
-        except:
-            print('\nData was not saved.')
-            bln_changes = True
-
-        return bln_changes
+        if bln_changes:
+            try:
+                # Open the file in write mode
+                objFile = open(file_name, 'w')
+                # Loop through objects in table list
+                for product in list_of_products:
+                    # Extract values, concatenate as string, write to text file
+                    objFile.write(product.product_name + ',' + product.product_price + '\n')
+                # Close text file
+                objFile.close()
+                print('\nData has been saved.')
+                bln_changes = False
+            except:
+                print('\nData was not saved.')
+                bln_changes = True
+            return bln_changes
+        else:
+            print('\nNo changes found.  Data was not saved.')
 
 class DataProcessor:
 
@@ -254,16 +256,16 @@ while True:
         lstOfProductObjects, bln_changes = DataProcessor.add_data_to_list(name, price, lstOfProductObjects)
     elif choice_str.strip() == '3':
         # Let user save current data to file and exit program
-        bln_changes = FileProcessor.write_data_to_file(strFileName, lstOfProductObjects)
+        bln_changes = FileProcessor.write_data_to_file(strFileName, lstOfProductObjects, bln_changes)
     elif choice_str.strip() == '4':
         if bln_changes:
             print('You have unsaved changes.')
             choice_str = input('Do you wish to save them? (y/n) ')
             if choice_str.lower() == 'y':
-                FileProcessor.write_data_to_file(strFileName, lstOfProductObjects)
+                FileProcessor.write_data_to_file(strFileName, lstOfProductObjects, bln_changes)
             else:
                 print('\nData was not saved.')
-        print('\nGoodbye.')
+        input('\nGoodbye.\n\nPress enter to close window.')
         break
     else:
         print('\n*********************')
